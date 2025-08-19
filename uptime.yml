@@ -1,10 +1,19 @@
 - name: uptime-monitoring installer
   become: true
   hosts: local
+  vars_prompt:
+    - name: mode
+      default: install
+      prompt: install / uninstall
+      private: false
   tasks:
     - name: Gather all services facts
       service_facts:
     - name: Install uptime-monitoring if needed
       include_role:
         name: uptime-installer
-      when: ansible_facts.services['uptime-monitoringg.service'] is not defined
+      when: mode == "install" and ansible_facts.services['uptime-monitoring.service'] is not defined
+    - name: Uninstall uptime-monitoring
+      include_role:
+        name: uptime-uninstaller
+      when: mode == "uninstall" and ansible_facts.services['uptime-monitoring.service'] is defined
