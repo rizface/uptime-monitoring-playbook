@@ -1,6 +1,6 @@
 - name: Clean up uptime-monitoring (if exists)
   command: rm -rf /usr/local/bin/uptime-monitoring
-- name: Download uptime-monitoring 
+- name: Download uptime-monitoring {{version}}
   get_url:
     url: https://github.com/rizface/uptime-monitoring/releases/download/{{version}}/{{version}}
     dest: /usr/local/bin/uptime-monitoring
