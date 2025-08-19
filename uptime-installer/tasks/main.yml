@@ -1,0 +1,30 @@
+- name: Clean up uptime-monitoring (if exists)
+  command: rm -rf /usr/local/bin/uptime-monitoring
+- name: Download uptime-monitoring 
+  get_url:
+    url: https://github.com/rizface/uptime-monitoring/releases/download/{{version}}/{{version}}
+    dest: /usr/local/bin/uptime-monitoring
+    mode: '0755'
+    owner: debianroot
+    group: root
+- name: Setup database dir
+  command: mkdir -p /var/lib/uptime-monitoring
+- name: Setup service file
+  copy:
+    src: ../files/uptime-monitoring.service
+    dest: /etc/systemd/system/uptime-monitoring.service
+    owner: debianroot
+    group: root
+- name: Start uptime-monitoring service
+  service:
+    name: uptime-monitoring
+    state: started
+    enabled: true
+- name: Healthcheck
+  uri:
+    url: https://uptime.zeroriz.space/api/healthcheck
+    method: get
+  register: result
+  retries: 5
+  delay: 3
+  until: result.status == 200

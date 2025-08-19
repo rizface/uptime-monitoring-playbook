@@ -1,0 +1,1 @@
+This is automation to setup https://github.com/rizface/uptime-monitoring in my local env

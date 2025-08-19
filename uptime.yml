@@ -1,0 +1,10 @@
+- name: uptime-monitoring installer
+  become: true
+  hosts: local
+  tasks:
+    - name: Gather all services facts
+      service_facts:
+    - name: Install uptime-monitoring if needed
+      include_role:
+        name: uptime-installer
+      when: ansible_facts.services['uptime-monitoringg.service'] is not defined
