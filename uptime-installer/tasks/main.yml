@@ -11,20 +11,34 @@
   poll: 0
   register: job_info
 - name: Setup database dir
-  command: mkdir -p /var/lib/uptime-monitoring
+  file:
+    path: /var/lib/uptime-monitoring
+    mode: '0770'
+    owner: debianroot
+    group: root
+    state: directory
 - name: Setup service file
   copy:
     src: ../files/uptime-monitoring.service
     dest: /etc/systemd/system/uptime-monitoring.service
     owner: debianroot
     group: root
-- name: Check download status
-  async_status:
-    jid: "{{job_info.ansible_job_id}}"
-  register: job_status
-  retries: 10
-  delay: 5
-  until: job_status.finished
+- block:
+    - name: Check download status
+      async_status:
+        jid: "{{job_info.ansible_job_id}}"
+      register: job_status
+      retries: 10
+      delay: 5
+      until: job_status.finished
+  rescue:
+    - name: Revert action - remove database dir
+      command: rm -rf /var/lib/uptime-monitoring
+    - name: Revert action - remove service file
+      command: rm /etc/systemd/system/uptime-monitoring.service
+    - name: Exit
+      fail:
+        msg: "Failed downloading uptime-monitoring {{version}}"
 - name: Start uptime-monitoring service
   service:
     name: uptime-monitoring
