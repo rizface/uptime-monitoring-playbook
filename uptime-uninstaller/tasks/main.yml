@@ -3,9 +3,14 @@
     name: uptime-monitoring.service
     state: stopped
     enabled: false
+  ignore_errors: yes
 - name: Remove uptime-monitoring.service from /etc/systemd/system
   command: rm /etc/systemd/system/uptime-monitoring.service
+  ignore_errors: true
+- name: Remove uptime-monitoring db
+  command: rm -rf /var/lib/uptime-monitoring
 - name: daemon-reload
   command: systemctl daemon-reload
 - name: Remove uptime-monitoring binary from /usr/local/bin
   command: rm /usr/local/bin/uptime-monitoring
+  ignore_errors: true
