@@ -1,15 +1,10 @@
 - name: Clean up uptime-monitoring (if exists)
   command: rm -rf /usr/local/bin/uptime-monitoring
-- name: Download uptime-monitoring {{version}}
-  get_url:
-    url: https://github.com/rizface/uptime-monitoring/releases/download/{{version}}/{{version}}
-    dest: /usr/local/bin/uptime-monitoring
-    mode: '0755'
-    owner: debianroot
-    group: root
-  async: 300
-  poll: 0
-  register: job_info
+- name: Download uptime-monitoring version {{version}}
+  include_tasks: shared-tasks/uptime-downloader.yml
+  vars:
+    async_time: 300 # 5 minute
+    poll_time: 0 # dont wait
 - name: Setup database dir
   file:
     path: /var/lib/uptime-monitoring

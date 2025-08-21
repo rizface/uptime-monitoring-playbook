@@ -1,12 +1,14 @@
+- name: Stop uptime-monitoring service
+  service:
+    name: uptime-monitoring.service
+    state: stopped
 - name: Remove old uptime-monitoring from /usr/local/bin/uptime-monitoring
   command: rm /usr/local/bin/uptime-monitoring
 - name: Download uptime-monitoring version {{version}}
-  get_url:
-    url: https://github.com/rizface/uptime-monitoring/releases/download/{{version}}/{{version}}
-    dest: /usr/local/bin/uptime-monitoring
-    mode: '0755'
-    owner: debianroot
-    group: root
+  include_tasks: shared-tasks/uptime-downloader.yml
+  vars:
+    async_time: 300 # 5 minute
+    poll_time: 5 # check every 5 seconds
 - name: Restart uptime-monitoring
   service:
     name: uptime-monitoring.service
