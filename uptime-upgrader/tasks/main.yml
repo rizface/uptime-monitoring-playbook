@@ -1,0 +1,13 @@
+- name: Remove old uptime-monitoring from /usr/local/bin/uptime-monitoring
+  command: rm /usr/local/bin/uptime-monitoring
+- name: Download uptime-monitoring version {{version}}
+  get_url:
+    url: https://github.com/rizface/uptime-monitoring/releases/download/{{version}}/{{version}}
+    dest: /usr/local/bin/uptime-monitoring
+    mode: '0755'
+    owner: debianroot
+    group: root
+- name: Restart uptime-monitoring
+  service:
+    name: uptime-monitoring.service
+    state: restarted

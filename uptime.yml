@@ -4,7 +4,7 @@
   vars_prompt:
     - name: mode
       default: install
-      prompt: install / uninstall
+      prompt: install / upgrade / uninstall
       private: false
   tasks:
     - name: Gather all services facts
@@ -17,3 +17,7 @@
       include_role:
         name: uptime-uninstaller
       when: mode == "uninstall" and ansible_facts.services['uptime-monitoring.service'] is defined
+    - name: Upgrade uptime-monitoring to version {{version}}
+      include_role:
+        name: uptime-upgrader
+      when: mode == "upgrade" and ansible_facts.services['uptime-monitoring.service'] is defined
