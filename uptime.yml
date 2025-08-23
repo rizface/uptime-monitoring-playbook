@@ -1,6 +1,8 @@
 - name: uptime-monitoring installer
   become: true
-  hosts: local
+  hosts: 
+    - local
+    - uptime-host
   vars_prompt:
     - name: mode
       default: install
