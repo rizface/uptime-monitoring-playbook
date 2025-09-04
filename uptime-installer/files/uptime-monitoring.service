@@ -5,7 +5,6 @@ Documentation=https://github.com/rizface/uptime-monitoring
 [Service]
 Restart=on-failure
 ExecStart=/usr/local/bin/uptime-monitoring
-User=debianroot
 
 [Install]
 WantedBy=multi-user.target

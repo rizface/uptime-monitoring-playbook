@@ -1,6 +1,3 @@
-- name: debug
-  debug:
-    msg: "{{ansible_become_password}}"
 - name: Clean up uptime-monitoring (if exists)
   command: rm -rf /usr/local/bin/uptime-monitoring
 - name: Download uptime-monitoring version {{version}}
@@ -12,14 +9,12 @@
   file:
     path: /var/lib/uptime-monitoring
     mode: '0770'
-    owner: debianroot
     group: root
     state: directory
 - name: Setup service file
   copy:
     src: ../files/uptime-monitoring.service
     dest: /etc/systemd/system/uptime-monitoring.service
-    owner: debianroot
     group: root
 - block:
     - name: Check download status
@@ -44,7 +39,7 @@
     enabled: true
 - name: Healthcheck
   uri:
-    url: https://uptime.zeroriz.space/api/healthcheck
+    url: "http://{{ansible_host}}:3000/api/healthcheck"
     method: get
   register: result
   retries: 5

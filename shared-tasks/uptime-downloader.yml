@@ -3,7 +3,6 @@
     url: https://github.com/rizface/uptime-monitoring/releases/download/{{version}}/{{version}}
     dest: /usr/local/bin/uptime-monitoring
     mode: '0755'
-    owner: debianroot
     group: root
   async: "{{async_time}}"
   poll: "{{poll_time}}"

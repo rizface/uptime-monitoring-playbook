@@ -1,1 +1,3 @@
 ansible-client
+gcp_keys/*
+sshkeys/*
